@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="com.qs.entity.Customer" table="t_customer">
+        <id name="id" type="string" column="ID">
+            <!--generator的class类型
+                assigned:主键的状态 assigned表示程序生成
+                sequence：Oracle中的序列
+                identity：Sql中的自动编号
+                increment：先查询最大的编号再增1
+                uuid：生成32位长的字符串
+                native：根据数据库自动生成
+             -->
+            <generator class="uuid"/>
+        </id>
+
+        <!-- 直接使用property属性设置 -->
+        <property name="name" type="string" column="NAME" length="50" not-null="true"/>
+        <property name="sex" type="char" column="SEX"/>
+        <property name="married" type="boolean" column="MARRIED"/>
+        <property name="createTime" type="timestamp">
+            <column name="CREATETIME"/>
+        </property>
+
+        <!-- 这里指定access数值为field，表示使用java反射机制直接访问类的属性 -->
+        <property name="email" type="java.lang.String" column="EMAIL" access="field"/>
+        <property name="age" type="int" column="AGE" access="field"/>
+        <!--<property name="age" type="java.lang.Integer" column="AGE" access="field"/>-->
+    </class>
+</hibernate-mapping>
