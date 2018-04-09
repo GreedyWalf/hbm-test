@@ -7,14 +7,12 @@ public class Customer implements Serializable {
 
     private String id;
     private String name;
-    private char sex;
-    private boolean married;
-    private Timestamp createTime;
 
-    //注意：这个字段没有get、set方法
-    private String email;
+    public Customer(){}
 
-    private Integer age;
+    public Customer(String name) {
+        this.name = name;
+    }
 
     public String getId() {
         return id;
@@ -30,29 +28,5 @@ public class Customer implements Serializable {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public char getSex() {
-        return sex;
-    }
-
-    public void setSex(char sex) {
-        this.sex = sex;
-    }
-
-    public boolean isMarried() {
-        return married;
-    }
-
-    public void setMarried(boolean married) {
-        this.married = married;
-    }
-
-    public Timestamp getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Timestamp createTime) {
-        this.createTime = createTime;
     }
 }

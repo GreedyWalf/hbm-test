@@ -5,7 +5,7 @@
 
 <hibernate-mapping package="com.qs.entity">
     <!-- 上面package属性指定包名，这里name属性值对应类无需写全路径 -->
-    <class name="Customer" table="t_customer">
+    <class name="Order" table="t_order">
         <id name="id" type="string" column="ID" length="32">
             <!--generator的class类型
                 assigned:主键的状态 assigned表示程序生成
@@ -19,6 +19,16 @@
         </id>
 
         <!-- 直接使用property属性设置 -->
-        <property name="name" type="string" column="NAME" length="50" not-null="true"/>
+        <property name="orderNumber" type="string">
+            <column name="ORDER_NUMBER" length="15" not-null="true"/>
+        </property>
+
+        <!-- 使用<many-to-one>元素建立customer属性和order表的外键CUSTOMER_ID之间的映射
+            name: 设定待映射的持久化类的属性的名字，这里为Order类的customer属性；
+            column: 设定和持久化类的属性对应的表的外键，此处为Order表的外检CUSTOMER_ID；
+            class: 设定待持久化类的属性的名称；（name属性值对应的类型）
+            lazy: false表示当hibernate从数据库中加载order对象时，会自动加载与它关联的customer对象；
+         -->
+        <many-to-one name="customer" column="CUSTOMER_ID" class="Customer" not-null="true" lazy="false"/>
     </class>
 </hibernate-mapping>

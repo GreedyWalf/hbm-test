@@ -22,9 +22,10 @@
         <!-- 是否格式化sql -->
         <property name="format_sql">true</property>
 
-        <property name="hbm2ddl.auto">create</property>
+        <property name="hbm2ddl.auto">update</property>
 
         <!-- 映射文件 -->
         <mapping resource="Customer.hbm.xml" />
+        <mapping resource="Order.hbm.xml" />
     </session-factory>
 </hibernate-configuration>
