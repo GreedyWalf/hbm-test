@@ -7,18 +7,20 @@
     <!-- 上面package属性指定包名，这里name属性值对应类无需写全路径 -->
     <class name="Customer" table="t_customer">
         <id name="id" type="string" column="ID" length="32">
-            <!--generator的class类型
-                assigned:主键的状态 assigned表示程序生成
-                sequence：Oracle中的序列
-                identity：Sql中的自动编号
-                increment：先查询最大的编号再增1
-                uuid：生成32位长的字符串
-                native：根据数据库自动生成
-             -->
             <generator class="uuid"/>
         </id>
 
         <!-- 直接使用property属性设置 -->
         <property name="name" type="string" column="NAME" length="50" not-null="true"/>
+
+        <!--
+            xml方式实现oneToMany关联，及在一的一方维护多的一方数据；
+            inverse属性：默认为false，表示控制权在customer一方维护;
+            lazy属性：默认为false，表示不启用延迟加载；（在真正使用属性时的时候才向数据库发送sql，查询获取；比如customer对象）
+         -->
+        <set name="orders" inverse="true" lazy="true">
+            <key column="customerId"/>
+            <one-to-many class="Order"/>
+        </set>
     </class>
 </hibernate-mapping>

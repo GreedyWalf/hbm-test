@@ -2,7 +2,6 @@ package com.qs.test;
 
 import com.qs.entity.Customer;
 import com.qs.entity.Order;
-import com.sun.org.apache.regexp.internal.RE;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -15,7 +14,7 @@ import java.util.*;
 public class Test {
 
     public static void main(String[] args) {
-//        save();
+        save();
 //        testFind();
 //        testFind2();
 //        testFind3();
@@ -24,12 +23,27 @@ public class Test {
 //        testFind6();
 //        testFind7();
 //        testFind8();
-        testFind9();
+//        testFind9();
+
+//        test();
+
+//        saveForOne2Many();
+
+//        getById("40288b2e639664930163966498ec0003");
+    }
+
+    public static void test(){
+        Session session = new Configuration()
+                .configure()
+                .buildSessionFactory()
+                .openSession();
+
+        System.out.println(session);
     }
 
 
     /**
-     * 测试hibernate保存数据
+     * 测试hibernate保存数据(在多的一方维护一的一方保存数据)
      */
     private static void save() {
         Session session = new Configuration()
@@ -39,7 +53,7 @@ public class Test {
 
         //先保存customer
         Transaction transaction = session.beginTransaction();
-        Customer customer = new Customer("小红");
+        Customer customer = new Customer("zhangsan");
         session.save(customer);
 
         //将customer对象关联在order对象中，再保存order对象
@@ -49,6 +63,58 @@ public class Test {
         session.save(order2);
 
         transaction.commit();
+    }
+
+
+    /**
+     * 测试hibernate保存数据（在一的一方维护多的一方的数据）
+     *
+     * 注意观察输出的sql，先插入一条customer记录，在插入两条order记录，在将两条order记录关联的customer_id更新掉；
+     */
+    private static void saveForOne2Many(){
+        Session session = new Configuration()
+                .configure()
+                .buildSessionFactory()
+                .openSession();
+
+        Transaction ts = session.beginTransaction();
+        Customer customer = new Customer();
+        customer.setName("张三丰");
+        session.save(customer);
+
+
+        Order order = new Order();
+        order.setOrderNumber("11111");
+
+        Order order2 = new Order();
+        order2.setOrderNumber("22222");
+
+
+        Set<Order> orders = new HashSet<Order>();
+        orders.add(order);
+        orders.add(order2);
+
+        customer.setOrders(orders);
+        session.save(order);
+        session.save(order2);
+        ts.commit();
+    }
+
+    /**
+     * 测试配置映射关系的lazy属性作用
+     */
+    private static void getById(String customerId){
+        Session session = new Configuration()
+                .configure()
+                .buildSessionFactory()
+                .openSession();
+
+        Transaction ts = session.beginTransaction();
+        Customer customer = (Customer) session.get(Customer.class, customerId);
+        System.out.println(customer.getName());
+        //设置lazy="true"表示启用在执行这个语句之前，不会向数据库发送sql，当需要获取order表数据时，再发送sql；
+        System.out.println(customer.getOrders());
+        ts.commit();
     }
 
 

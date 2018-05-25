@@ -7,14 +7,6 @@
     <!-- 上面package属性指定包名，这里name属性值对应类无需写全路径 -->
     <class name="Order" table="t_order">
         <id name="id" type="string" column="ID" length="32">
-            <!--generator的class类型
-                assigned:主键的状态 assigned表示程序生成
-                sequence：Oracle中的序列
-                identity：Sql中的自动编号
-                increment：先查询最大的编号再增1
-                uuid：生成32位长的字符串
-                native：根据数据库自动生成
-             -->
             <generator class="uuid"/>
         </id>
 
@@ -27,7 +19,7 @@
             name: 设定待映射的持久化类的属性的名字，这里为Order类的customer属性；
             column: 设定和持久化类的属性对应的表的外键，此处为Order表的外检CUSTOMER_ID；
             class: 设定待持久化类的属性的名称；（name属性值对应的类型）
-            lazy: false表示当hibernate从数据库中加载order对象时，会自动加载与它关联的customer对象；
+            lazy: 是否启用延时加载
          -->
         <many-to-one name="customer" column="CUSTOMER_ID" class="Customer" not-null="true" lazy="false"/>
     </class>
