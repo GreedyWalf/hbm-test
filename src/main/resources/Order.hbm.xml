@@ -20,7 +20,9 @@
             column: 设定和持久化类的属性对应的表的外键，此处为Order表的外检CUSTOMER_ID；
             class: 设定待持久化类的属性的名称；（name属性值对应的类型）
             lazy: 是否启用延时加载
+            cascade: 级联操作，级联指的是当主控方执行操作时，关联对象（被动方）是否同步执行同一操作
+            （cascade属性为all、save-update的话，可实现自动持久化所关联的对象）
          -->
-        <many-to-one name="customer" column="CUSTOMER_ID" class="Customer" not-null="true" lazy="false"/>
+        <many-to-one name="customer" column="CUSTOMER_ID" class="Customer" not-null="true" lazy="false" cascade="save-update"/>
     </class>
 </hibernate-mapping>

@@ -54,7 +54,7 @@ public class Test {
         //先保存customer
         Transaction transaction = session.beginTransaction();
         Customer customer = new Customer("zhangsan");
-        session.save(customer);
+//        session.save(customer);
 
         //将customer对象关联在order对象中，再保存order对象
         Order order = new Order("D20180403", customer);
