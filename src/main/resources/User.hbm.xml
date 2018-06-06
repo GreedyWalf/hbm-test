@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.qs.entity">
+    <class name="User" table="t_user">
+        <id name="userId" type="string" column="USER_ID" length="32">
+            <!--
+                class属性：主键生成策略，表示主键和外键是同一个，所以这里的主键就是外键，并且指向identifyCard这个类
+            -->
+            <generator class="foreign">
+                <param name="property">identifyCard</param>
+            </generator>
+        </id>
+
+        <property name="userName" type="string" column="USER_NAME" length="50" not-null="true"/>
+
+        <!--
+            name属性：表示User类中维护关联IdentifyCard类的对象，作为User类的属性；
+            constrained属性：表示主键当外键用（表示当前类User作为主控方）；
+        -->
+        <one-to-one name="identifyCard" class="com.qs.entity.IdentifyCard" constrained="true" lazy="false"/>
+    </class>
+</hibernate-mapping>

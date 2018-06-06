@@ -6,15 +6,15 @@
 <hibernate-configuration>
     <session-factory>
         <!-- 数据库URL -->
-        <property name="connection.url">jdbc:mysql://localhost:3306/hbm-test</property>
+        <property name="connection.url">jdbc:oracle:thin:@192.168.114.128:1521:myorcl</property>
         <!-- 数据库用户名 -->
-        <property name="connection.username">root</property>
+        <property name="connection.username">qinyupeng</property>
         <!-- 数据库密码 -->
-        <property name="connection.password">12345678</property>
+        <property name="connection.password">123</property>
         <!-- JDBC驱动 -->
-        <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
+        <property name="connection.driver_class">oracle.jdbc.driver.OracleDriver</property>
         <!-- 每个数据库都有对应的Dialect以匹配其平台特性 -->
-        <property name="dialect">org.hibernate.dialect.MySQLDialect</property>
+        <property name="dialect">org.hibernate.dialect.Oracle10gDialect</property>
         <!-- 指定当前session范围和上下文 -->
         <property name="current_session_context_class">thread</property>
         <!-- 指定运行期生成的SQL输出到日志以供调试 -->
@@ -22,15 +22,10 @@
         <!-- 是否格式化sql -->
         <!--<property name="format_sql">true</property>-->
 
-        <property name="hbm2ddl.auto">update</property>
+        <property name="hbm2ddl.auto">create</property>
 
         <!-- 映射文件 -->
-        <!-- one-to-many映射 -->
         <mapping resource="Customer.hbm.xml" />
         <mapping resource="Order.hbm.xml" />
-
-        <!-- one-to-one映射 -->
-        <mapping resource="User.hbm.xml"/>
-        <mapping resource="IdentifyCard.hbm.xml" />
     </session-factory>
 </hibernate-configuration>

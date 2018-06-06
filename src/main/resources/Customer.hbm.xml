@@ -14,12 +14,12 @@
         <property name="name" type="string" column="NAME" length="50" not-null="true"/>
 
         <!--
-            xml方式实现oneToMany关联，及在一的一方维护多的一方数据；
+            xml方式实现oneToMany关联，即在一的一方维护多的一方数据；
             inverse属性：默认为false，表示控制权在customer一方维护;
-            lazy属性：默认为false，表示不启用延迟加载；（在真正使用属性时的时候才向数据库发送sql，查询获取；比如customer对象）
+            lazy属性：默认值为true，表示启用延迟加载；设置为false，表示立即加载（在真正使用属性时的时候才向数据库发送sql，查询获取；比如customer对象）
          -->
-        <set name="orders" inverse="true" lazy="true">
-            <key column="customerId"/>
+        <set name="orders" inverse="true" lazy="false">
+            <key column="CUSTOMER_ID"/>
             <one-to-many class="Order"/>
         </set>
     </class>

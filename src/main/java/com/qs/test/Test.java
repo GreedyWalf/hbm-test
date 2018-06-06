@@ -14,7 +14,7 @@ import java.util.*;
 public class Test {
 
     public static void main(String[] args) {
-        save();
+//        save();
 //        testFind();
 //        testFind2();
 //        testFind3();
@@ -29,7 +29,7 @@ public class Test {
 
 //        saveForOne2Many();
 
-//        getById("40288b2e639664930163966498ec0003");
+        getById("4028829263cedcbd0163cedcc14a0001");
     }
 
     public static void test(){
@@ -43,7 +43,7 @@ public class Test {
 
 
     /**
-     * 测试hibernate保存数据(在多的一方维护一的一方保存数据)
+     * 测试设置主控方cascade="save-update"，完成order、customer两个实体保存；
      */
     private static void save() {
         Session session = new Configuration()
@@ -54,7 +54,8 @@ public class Test {
         //先保存customer
         Transaction transaction = session.beginTransaction();
         Customer customer = new Customer("zhangsan");
-//        session.save(customer);
+        //Order作为主控方，配置中使用cascade级联保存和更新操作，这里可以不用对关联对象customer进行保存操作，hibernate会自动保存的；
+        //session.save(customer);
 
         //将customer对象关联在order对象中，再保存order对象
         Order order = new Order("D20180403", customer);

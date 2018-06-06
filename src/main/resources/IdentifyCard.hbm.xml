@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.qs.entity">
+    <class name="IdentifyCard" table="t_identify_card">
+        <id name="cardId" type="string" column="CARD_ID" length="32">
+            <generator class="uuid"/>
+        </id>
+
+        <property name="cardName" type="string" column="CARD_NAME" length="50" not-null="true"/>
+
+        <!-- 使用one-to-one标签设置IdentifyCard和User属性关联关系 -->
+        <one-to-one name="user" class="com.qs.entity.User" lazy="false"/>
+    </class>
+</hibernate-mapping>
