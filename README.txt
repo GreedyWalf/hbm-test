@@ -9,5 +9,5 @@ DEMO设计内容：
 
 
     3、多对多关联；
-
+        Student和Course多对多关联；（t_student表和t_course表多对多关联）
 

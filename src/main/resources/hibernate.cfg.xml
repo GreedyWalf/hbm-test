@@ -22,7 +22,7 @@
         <!-- 是否格式化sql -->
         <!--<property name="format_sql">true</property>-->
 
-        <property name="hbm2ddl.auto">update</property>
+        <property name="hbm2ddl.auto">create</property>
 
         <!-- 映射文件 -->
         <!-- one-to-many映射 -->
@@ -35,5 +35,10 @@
 
         <mapping resource="Person.hbm.xml"/>
         <mapping resource="IDCard.hbm.xml"/>
+
+        <!-- many-to-many映射 -->
+        <mapping resource="Student.hbm.xml"/>
+        <mapping resource="Course.hbm.xml"/>
+        <mapping resource="StudentCourseRel.hbm.xml"/>
     </session-factory>
 </hibernate-configuration>
