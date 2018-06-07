@@ -1,6 +1,8 @@
 package com.qs.test;
 
+import com.qs.entity.IDCard;
 import com.qs.entity.IdentifyCard;
+import com.qs.entity.Person;
 import com.qs.entity.User;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -12,8 +14,13 @@ public class TestOne2One {
 //        test();
 
 //        testSave();
-        getUserByCardId("4028829263cee7e90163cee823000000");
-        getIdentifyCardByUserId("4028829263cee7e90163cee823000000");
+//        getUserByCardId("4028829263cee7e90163cee823000000");
+//        getIdentifyCardByUserId("4028829263cee7e90163cee823000000");
+
+
+//        one2OneFkave();
+        findPersonByCardId("40288e9163d465760163d4657a390000");
+        findCardByPersonId("40288e9163d465760163d4657a4e0001");
     }
 
     public static void test() {
@@ -68,7 +75,7 @@ public class TestOne2One {
     /**
      * 测试双向一对一主键关联，根据UserId获取到主控方User表实体，在通过user对象属性获取identifyCard对象；
      */
-    public static void getIdentifyCardByUserId(String userId){
+    public static void getIdentifyCardByUserId(String userId) {
         Session session = new Configuration()
                 .configure()
                 .buildSessionFactory()
@@ -80,4 +87,56 @@ public class TestOne2One {
         System.out.println(user.getIdentifyCard());
         transaction.commit();
     }
+
+
+    /*****--------测试单向一对一外键关联------------******/
+    public static void one2OneFkave() {
+        Session session = new Configuration()
+                .configure()
+                .buildSessionFactory()
+                .openSession();
+
+        Transaction transaction = session.beginTransaction();
+        IDCard idCard = new IDCard("准考证");
+        Person person = new Person("李四");
+        person.setIdCard(idCard);
+
+        session.save(idCard);
+        session.save(person);
+        transaction.commit();
+    }
+
+
+    /**
+     * 测试双向一对一外键关联（通过IDCard实体获取关联的Person实体）
+     */
+    public static void findPersonByCardId(String cardId) {
+        Session session = new Configuration()
+                .configure()
+                .buildSessionFactory()
+                .openSession();
+
+        Transaction transaction = session.beginTransaction();
+        IDCard idCard = (IDCard) session.get(IDCard.class, cardId);
+        System.out.println(idCard.getCardName());
+        System.out.println(idCard.getPerson().getPersonName());
+        transaction.commit();
+    }
+
+    /**
+     * 测试双向一对一外键关联（通过Person实体获取关联的IdCard实体）
+     */
+    public static void findCardByPersonId(String personId) {
+        Session session = new Configuration()
+                .configure()
+                .buildSessionFactory()
+                .openSession();
+
+        Transaction transaction = session.beginTransaction();
+        Person person = (Person) session.get(Person.class, personId);
+        System.out.println(person.getPersonName());
+        System.out.println(person.getIdCard().getCardName());
+        transaction.commit();
+    }
+
 }

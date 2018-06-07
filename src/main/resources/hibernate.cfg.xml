@@ -32,5 +32,8 @@
         <!-- one-to-one映射 -->
         <mapping resource="User.hbm.xml"/>
         <mapping resource="IdentifyCard.hbm.xml" />
+
+        <mapping resource="Person.hbm.xml"/>
+        <mapping resource="IDCard.hbm.xml"/>
     </session-factory>
 </hibernate-configuration>

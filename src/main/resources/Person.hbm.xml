@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.qs.entity">
+    <class name="Person" table="t_person">
+        <id name="personId" type="string" column="PERSON_ID" length="32">
+            <generator class="uuid"/>
+        </id>
+
+        <property name="personName" type="string" column="PERSON_NAME" length="50" not-null="true"/>
+
+        <!--
+            和多对一关联一致，多了个unique属性；
+
+            name属性：表示在Person类中关联的idCard对象；
+            column属性：表示定义t_person表的外键为字段CARD_ID，关联t_idcard表的主键；
+            unique属性：true表示指定当前端为1
+        -->
+        <many-to-one name="idCard" column="CARD_ID" unique="true"/>
+    </class>
+</hibernate-mapping>

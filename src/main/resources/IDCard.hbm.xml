@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.qs.entity">
+    <class name="IDCard" table="t_idcard">
+        <id name="cardId" type="string" column="CARD_ID" length="32">
+            <generator class="uuid"/>
+        </id>
+
+        <property name="cardName" type="string" column="CARD_NAME" length="50" not-null="true"/>
+
+        <!--
+           name属性：表示IDCard类中关联的属性；
+           property-ref属性（关键属性）：指定关联类（Person类中定义的关联当前类的属性）的属性，如果不指定，则默认
+                                       会使用当前类的主键作为Person表的外键去关联；（待研究。。）
+           class属性：指定person属性所在类，这个属性可以不写，hibernate会自动帮我们查找出来；
+        -->
+        <one-to-one name="person" property-ref="idCard" class="com.qs.entity.Person"/>
+    </class>
+</hibernate-mapping>
