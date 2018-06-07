@@ -15,11 +15,11 @@
         <!--
             要查询到多对多关联的student表数据，table属性指定维护的中间表表名；（hibernate会去这个表查询多对多关联关系）
          -->
-        <set name="studentSet" table="t_student_course">
-            <!-- 这个column属性表示当前类（course）对应到中间表的外键字段名 -->
+        <!--<set name="studentSet" table="t_student_course">
+            &lt;!&ndash; 这个column属性表示当前类（course）对应到中间表的外键字段名 &ndash;&gt;
             <key column="COURSE_ID" not-null="true"/>
-            <!-- 多对多映射关系，表示声明当前类（course）中维护的多对多关联表（student）在中间表的外键字段名 -->
+            &lt;!&ndash; 多对多映射关系，表示声明当前类（course）中维护的多对多关联表（student）在中间表的外键字段名 &ndash;&gt;
             <many-to-many class="com.qs.entity.Student" column="STUDENT_ID"/>
-        </set>
+        </set>-->
     </class>
 </hibernate-mapping>
