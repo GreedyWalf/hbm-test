@@ -1,7 +1,6 @@
 package com.qs.test;
 
-import com.qs.entity.Customer;
-import com.qs.entity.Order;
+import com.qs.entity.User;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -13,306 +12,81 @@ import java.util.*;
 
 public class Test {
 
+    private static Session session = new Configuration().configure().buildSessionFactory().openSession();
+
     public static void main(String[] args) {
-//        save();
-//        testFind();
-//        testFind2();
-//        testFind3();
-//        testFind4();
-//        testFind5();
-//        testFind6();
-//        testFind7();
-//        testFind8();
-//        testFind9();
-
-//        test();
-
-//        saveForOne2Many();
-
-        getById("4028829263cedcbd0163cedcc14a0001");
+//        testSave();
+//        testSave();
+//        testStatus();
+        testStatus2();
     }
-
-    public static void test(){
-        Session session = new Configuration()
-                .configure()
-                .buildSessionFactory()
-                .openSession();
-
-        System.out.println(session);
-    }
-
 
     /**
-     * 测试设置主控方cascade="save-update"，完成order、customer两个实体保存；
-     */
-    private static void save() {
-        Session session = new Configuration()
-                .configure()
-                .buildSessionFactory()
-                .openSession();
-
-        //先保存customer
-        Transaction transaction = session.beginTransaction();
-        Customer customer = new Customer("zhangsan");
-        //Order作为主控方，配置中使用cascade级联保存和更新操作，这里可以不用对关联对象customer进行保存操作，hibernate会自动保存的；
-        //session.save(customer);
-
-        //将customer对象关联在order对象中，再保存order对象
-        Order order = new Order("D20180403", customer);
-        Order order2 = new Order("D20180403-2", customer);
-        session.save(order);
-        session.save(order2);
-
-        transaction.commit();
-    }
-
-
-    /**
-     * 测试hibernate保存数据（在一的一方维护多的一方的数据）
+     * 测试数据保存，验证一级缓存和快照理论
      *
-     * 注意观察输出的sql，先插入一条customer记录，在插入两条order记录，在将两条order记录关联的customer_id更新掉；
+     * 1、session执行save方法后并不会立即发出insert语句，而是在事务提交的时候发出；
+     * 2、session执行完save方法后，userId（主键）已经生成了，并被一同放在了一级缓存中；
+     * 3、不要在事务提交前更新userId（主键），会抛出异常；在提交之前，无论更改userName属性多少次，只会发出一次update语句；
      */
-    private static void saveForOne2Many(){
-        Session session = new Configuration()
-                .configure()
-                .buildSessionFactory()
-                .openSession();
-
-        Transaction ts = session.beginTransaction();
-        Customer customer = new Customer();
-        customer.setName("张三丰");
-        session.save(customer);
-
-
-        Order order = new Order();
-        order.setOrderNumber("11111");
-
-        Order order2 = new Order();
-        order2.setOrderNumber("22222");
-
-
-        Set<Order> orders = new HashSet<Order>();
-        orders.add(order);
-        orders.add(order2);
-
-        customer.setOrders(orders);
-        session.save(order);
-        session.save(order2);
-        ts.commit();
-    }
-
-    /**
-     * 测试配置映射关系的lazy属性作用
-     */
-    private static void getById(String customerId){
-        Session session = new Configuration()
-                .configure()
-                .buildSessionFactory()
-                .openSession();
-
-        Transaction ts = session.beginTransaction();
-        Customer customer = (Customer) session.get(Customer.class, customerId);
-        System.out.println(customer.getName());
-        //设置lazy="true"表示启用在执行这个语句之前，不会向数据库发送sql，当需要获取order表数据时，再发送sql；
-        System.out.println(customer.getOrders());
-        ts.commit();
-    }
-
-
-    /**
-     * 查询order列表，hibernate会同时将关联的customer数据也查出来，封装数据在order类中定义的customer属性中；
-     */
-    private static void testFind() {
-        Session session = new Configuration()
-                .configure()
-                .buildSessionFactory()
-                .openSession();
-
+    public static void testSave() {
         Transaction transaction = session.beginTransaction();
-        Query query = session.createQuery("from Order where customer.id=:customerId");
-        query.setString("customerId", "4028810e628be81801628be81a570000");
-        List orderList = query.list();
+        User user = new User("zhangsan");
+        //将user对象保存在一级缓存和快照中
+        session.save(user);
+
+        //执行完save方法后，user对象的主键userId已经生成，一同放在一级缓存中；
+        System.out.println(user.getUserId());
+
+        //更改了user对象的属性，将快照区中user属性值由"zhangsan"改成"张三"
+        user.setUserName("张三");
+
+        //不能更改主键值，会出现 org.hibernate.HibernateException异常
+        //user.setUserId("402882de63d9966a0163d9966d2f0000");
+        //事务提交时，对比一级缓存和快照中user对象值，返现userName属性不一致，然后发出update语句
+
+//        session.flush();
+        session.clear();
         transaction.commit();
     }
 
 
     /**
-     * 使用criteria查询Order数据
+     * 测试对象从瞬时态 -> 持久态 -> 游离态
      */
-    private static void testFind2() {
-        Session session = new Configuration()
-                .configure()
-                .buildSessionFactory()
-                .openSession();
+    public static void testStatus(){
         Transaction transaction = session.beginTransaction();
-        Criteria criteria = session.createCriteria(Order.class, "o");
-        List orderList = criteria.list();
-        transaction.commit();
-    }
+        User user = new User("zhangsan");  //new一个兑现，为瞬时态
+        session.save(user);  //这里变成持久态
+        System.out.println(user.getUserId());
+        System.out.println(user.getUserName());
 
+        user.setUserName("李四"); //如果上面已经是持久态了，这里更改属性会将一级缓存中对象属性更改
 
-    /**
-     * 使用criteria条件查询，or、in、like
-     */
-    private static void testFind3() {
-        Session session = new Configuration()
-                .configure()
-                .buildSessionFactory()
-                .openSession();
-        Transaction transaction = session.beginTransaction();
+        //下面的数据从一级缓存中获取的，看输出结果可以知道，确实将缓存中的userName属性值更改了
+        User user2 = (User) session.get(User.class, user.getUserId());
+        System.out.println(user2.getUserId());
+        System.out.println(user2.getUserName()); //李四
 
-        //使用orderNumber='' or orderNumber=''
-        Criteria criteria = session.createCriteria(Order.class, "o");
-        List orders = criteria.add(Restrictions.or(
-                Restrictions.eq("orderNumber", "D20180403"),
-                Restrictions.eq("orderNumber", "D20180403-2")
-        )).list();
-
-        //使用in('','')
-        criteria = session.createCriteria(Order.class);
-        List<String> orderNumbers = Arrays.asList("D20180403", "D20180403-2");
-        orders = criteria.add(Restrictions.in("orderNumber", orderNumbers)).list();
-
-        //使用like %orderNumber%
-        criteria = session.createCriteria(Order.class);
-        orders = criteria.add(Restrictions.like("orderNumber", "%2018%")).list();
-        transaction.commit();
-    }
-
-
-    /**
-     * 使用criteria排序，order by
-     */
-    private static void testFind4() {
-        Session session = new Configuration()
-                .configure()
-                .buildSessionFactory()
-                .openSession();
-
-        Transaction transaction = session.beginTransaction();
-
-        Criteria criteria = session.createCriteria(Order.class);
-        List orderList = criteria.addOrder(org.hibernate.criterion.Order.desc("id")).list();
-        transaction.commit();
-    }
-
-
-    /**
-     * 关联查询，Order表中维护了外键customerId关联查询Customer
-     * <p>
-     * select * from t_order o
-     * inner join t_customer c on o.customer_id=c.id
-     * where o.order_number='D20180403'
-     */
-    private static void testFind5() {
-        Session session = new Configuration()
-                .configure()
-                .buildSessionFactory()
-                .openSession();
-
-        Transaction transaction = session.beginTransaction();
-        Criteria criteria = session.createCriteria(Order.class, "o");
-        List orderList = criteria.createAlias("customer", "c").add(
-                Restrictions.eq("o.orderNumber", "D20180403")
-        ).list();
-
-        System.out.println(orderList);
-        transaction.commit();
-    }
-
-
-    /**
-     * 关联查询的另一种方式，sql和上面测试类似；
-     */
-    private static void testFind6() {
-        Session session = new Configuration()
-                .configure()
-                .buildSessionFactory()
-                .openSession();
-
-        Transaction transaction = session.beginTransaction();
-
-        Criteria criteria = session.createCriteria(Order.class, "o");
-        List result = criteria.createCriteria("customer", "c")
-                .add(Restrictions.eq("c.name", "小红"))
-                .setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP)
-                .list();
-        Iterator iterator = result.iterator();
-
-        List<Order> orderList = new ArrayList<Order>(result.size());
-        Set<Customer> customerList = new HashSet<Customer>(result.size());
-        while (iterator.hasNext()) {
-            Map entityMap = (Map) iterator.next();
-            Order order = (Order) entityMap.get("o");
-            Customer customer = (Customer) entityMap.get("c");
-            orderList.add(order);
-            customerList.add(customer);
-        }
-
-        transaction.commit();
-    }
-
-
-    /**
-     * Projections投影，使用聚合函数，比如max(order_number)
-     */
-    private static void testFind7() {
-        Session session = new Configuration()
-                .configure()
-                .buildSessionFactory()
-                .openSession();
-
-        Transaction transaction = session.beginTransaction();
-        Criteria criteria = session.createCriteria(Order.class, "o");
-        String orderNumber = (String) criteria.setProjection(Projections.max("o.orderNumber")).list().get(0);
-
-        criteria = session.createCriteria(Order.class,"o");
-        List orderList = criteria.add(Restrictions.eq("o.orderNumber", orderNumber)).list();
+        session.clear();
+        user.setUserName("王五");  //将一级缓存中的数据清空，对象编程游离态，事务提交也不会发出update操作数据库了
         transaction.commit();
     }
 
     /**
-     * 使用Projections可以指定查询表中的某些字段，而不是全部字段
+     * 测试对象从持久态 -> 游离态
      */
-    private static void testFind8(){
-        Session session = new Configuration()
-                .configure()
-                .buildSessionFactory()
-                .openSession();
-
+    public static void testStatus2(){
         Transaction transaction = session.beginTransaction();
-        Criteria criteria = session.createCriteria(Order.class, "o");
-        ProjectionList projectionList = Projections.projectionList();
-        projectionList.add(Projections.property("orderNumber"));
-        projectionList.add(Projections.property("id"));
-        List result = criteria.setProjection(projectionList).list();
-        transaction.commit();
-    }
+        //一级缓存中没有数据，先从数据库中查询，在保存在一级缓存中，此时获得的对象为持久态
+        User user = (User) session.get(User.class, "");
+        System.out.println(user.getUserId());
 
-    /**
-     * 使用Disjunction、Conjunction查询  就是拼接or、and
-     */
-    private static void testFind9(){
-        Session session = new Configuration()
-                .configure()
-                .buildSessionFactory()
-                .openSession();
+        //将对象从一级缓存和数据库中删除，快照中的对象也被删除
+        session.delete(user);
 
-        Transaction transaction = session.beginTransaction();
-        Criteria criteria = session.createCriteria(Order.class);
-
-        Conjunction conjunction = Restrictions.conjunction();
-        conjunction.add(Restrictions.like("orderNumber", "%2018%"))
-                .add(Restrictions.like("orderNumber","%D%"));
-
-        Disjunction disjunction = Restrictions.disjunction();
-        disjunction.add(Restrictions.eq("orderNumber","D20180403-2"))
-                .add(Restrictions.like("orderNumber","%-2%"));
-
-//        List list = criteria.add(conjunction).add(disjunction).list();
-
-        List orders = criteria.add(Restrictions.eqOrIsNull("orderNumber","D20180403"))
-                .add(Restrictions.or(conjunction, disjunction)).list();
+        //从一级缓存和数据库中都获取不到数据，此时user对象为游离态
+//        user = (User) session.get(User.class, "");
+//        System.out.println(user.getUserId());
         transaction.commit();
     }
 }

@@ -20,25 +20,22 @@
         <!-- 指定运行期生成的SQL输出到日志以供调试 -->
         <property name="show_sql">true</property>
         <!-- 是否格式化sql -->
-        <!--<property name="format_sql">true</property>-->
+        <property name="format_sql">true</property>
 
-        <property name="hbm2ddl.auto">create</property>
+        <!--
+            create：创建表，启动的时候，先drop然后再创建表，(测试人员用来测试数据，先清除掉前面的旧表，在创建新表)
+　　　　　　　create-drop：也表示创建，创建完后，就drop掉。(测试程序是否正确)
+　　　　　　　update：检测类和表是否一致，不一致就会做更新，将表更新到和类一样
+　　　　　　　validate：启动时检测表和类是否一致，不一致则报异常
+　　　　　　　一般常用update、validate。
+        -->
+        <property name="hbm2ddl.auto">update</property>
+
+        <!-- 是否设置自动提交 -->
+        <property name="hibernate.connection.autocommit">false</property>
 
         <!-- 映射文件 -->
         <!-- one-to-many映射 -->
-        <mapping resource="Customer.hbm.xml" />
-        <mapping resource="Order.hbm.xml" />
-
-        <!-- one-to-one映射 -->
         <mapping resource="User.hbm.xml"/>
-        <mapping resource="IdentifyCard.hbm.xml" />
-
-        <mapping resource="Person.hbm.xml"/>
-        <mapping resource="IDCard.hbm.xml"/>
-
-        <!-- many-to-many映射 -->
-        <mapping resource="Student.hbm.xml"/>
-        <mapping resource="Course.hbm.xml"/>
-        <mapping resource="StudentCourseRel.hbm.xml"/>
     </session-factory>
 </hibernate-configuration>
