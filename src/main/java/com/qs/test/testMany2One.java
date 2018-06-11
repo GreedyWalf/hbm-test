@@ -23,9 +23,9 @@ public class testMany2One {
     private static void testSave() {
         Transaction transaction = session.beginTransaction();
 
-        Customer customer = new Customer("张三");
-        Order order = new Order("111");
-        Order order2 = new Order("222");
+        Customer customer = new Customer("王五");
+        Order order = new Order("555");
+        Order order2 = new Order("666");
 
         order.setCustomer(customer);
         order2.setCustomer(customer);

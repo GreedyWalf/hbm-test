@@ -4,19 +4,19 @@
         "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 
 <hibernate-mapping package="com.qs.entity">
-    <class name="Customer" table="T_CUSTOMER">
-        <id name="customerId" type="string" column="CUSTOMER_ID" length="32">
+    <class name="Customer" table="t_customer">
+        <id name="customerId" type="string" column="customer_id" length="32">
             <generator class="uuid"/>
         </id>
 
-        <property name="customerName" type="string" column="CUSTOMER_NAME" length="50" not-null="true"/>
+        <property name="customerName" type="string" column="customer_name" length="50" not-null="true"/>
 
          <!--
          在一的一方维护多的一方数据；
           inverse：默认值为false，表示由自己（customer）维护关联关系，设置为true，表示由对方（order）维护；
          -->
         <set name="orderSet" inverse="true">
-            <key column="CUSTOMER_ID"/>
+            <key column="customer_id"/>
             <one-to-many class="Order"/>
         </set>
     </class>

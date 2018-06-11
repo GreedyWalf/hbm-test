@@ -20,9 +20,9 @@
         <!-- 指定运行期生成的SQL输出到日志以供调试 -->
         <property name="show_sql">true</property>
         <!-- 是否格式化sql -->
-        <!--<property name="format_sql">true</property>-->
+        <property name="format_sql">true</property>
 
-        <property name="hbm2ddl.auto">create</property>
+        <property name="hbm2ddl.auto">update</property>
 
         <!-- 映射文件 -->
         <!-- one-to-many映射 -->
