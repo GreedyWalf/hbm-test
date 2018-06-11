@@ -6,7 +6,8 @@
 <hibernate-mapping package="com.qs.entity">
     <!-- 上面package属性指定包名，这里name属性值对应类无需写全路径 -->
     <class name="Order" table="t_order">
-        <id name="id" type="string" column="ID" length="32">
+        <id name="orderId" type="string" column="ORDER_ID" length="32">
+            <!-- 配置之间生成策略为uuid -->
             <generator class="uuid"/>
         </id>
 
@@ -15,14 +16,7 @@
             <column name="ORDER_NUMBER" length="15" not-null="true"/>
         </property>
 
-        <!-- 使用<many-to-one>元素建立customer属性和order表的外键CUSTOMER_ID之间的映射
-            name: 设定待映射的持久化类的属性的名字，这里为Order类的customer属性；
-            column: 设定和持久化类的属性对应的表的外键，此处为Order表的外检CUSTOMER_ID；
-            class: 设定待持久化类的属性的名称；（name属性值对应的类型）
-            lazy: 是否启用延时加载(默认值为true，设置为false表示立即加载)
-            cascade: 级联操作，级联指的是当主控方执行操作时，关联对象（被动方）是否同步执行同一操作
-            （cascade属性为all、save-update的话，可实现自动持久化所关联的对象）
-         -->
-        <many-to-one name="customer" column="CUSTOMER_ID" class="Customer" not-null="true" lazy="false" cascade="save-update"/>
+
+        <many-to-one name="customer" column="CUSTOMER_ID" class="Customer"/>
     </class>
 </hibernate-mapping>

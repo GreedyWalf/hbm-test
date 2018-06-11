@@ -9,39 +9,40 @@ import java.util.Set;
  */
 public class Customer implements Serializable {
 
-    private String id;
-    private String name;
+    private String customerId;
+    private String customerName;
 
-    //在一的一方维护多的一方数据，这里为一个集合
-    private Set<Order> orders;
+    //一的一方维护多的一方数据（set集合）
+    private Set<Order> orderSet;
 
-    public Set<Order> getOrders() {
-        return orders;
+    public Set<Order> getOrderSet() {
+        return orderSet;
     }
 
-    public void setOrders(Set<Order> orders) {
-        this.orders = orders;
+    public void setOrderSet(Set<Order> orderSet) {
+        this.orderSet = orderSet;
     }
 
-    public Customer(){}
-
-    public Customer(String name) {
-        this.name = name;
+    public Customer() {
     }
 
-    public String getId() {
-        return id;
+    public Customer(String customerName) {
+        this.customerName = customerName;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public String getCustomerId() {
+        return customerId;
     }
 
-    public String getName() {
-        return name;
+    public void setCustomerId(String customerId) {
+        this.customerId = customerId;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public String getCustomerName() {
+        return customerName;
+    }
+
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
     }
 }

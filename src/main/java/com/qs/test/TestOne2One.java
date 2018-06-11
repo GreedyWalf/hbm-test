@@ -13,14 +13,14 @@ public class TestOne2One {
     public static void main(String[] args) {
 //        test();
 
-//        testSave();
+        testSave();
 //        getUserByCardId("4028829263cee7e90163cee823000000");
 //        getIdentifyCardByUserId("4028829263cee7e90163cee823000000");
 
 
 //        one2OneFkave();
-        findPersonByCardId("40288e9163d465760163d4657a390000");
-        findCardByPersonId("40288e9163d465760163d4657a4e0001");
+//        findPersonByCardId("40288e9163d465760163d4657a390000");
+//        findCardByPersonId("40288e9163d465760163d4657a4e0001");
     }
 
     public static void test() {

@@ -18,8 +18,8 @@
 
         <!--
             name属性：表示User类中维护关联IdentifyCard类的对象，作为User类的属性；
-            constrained属性：表示主键当外键用（表示当前类User作为主控方）；
+            constrained属性：表示主键当外键用
         -->
-        <one-to-one name="identifyCard" class="com.qs.entity.IdentifyCard" constrained="true" lazy="false"/>
+        <one-to-one name="identifyCard" class="IdentifyCard" constrained="true"/>
     </class>
 </hibernate-mapping>

@@ -2,27 +2,38 @@ package com.qs.entity;
 
 import java.io.Serializable;
 
+/**
+ * 多的一方
+ */
 public class Order implements Serializable {
 
-    private String id;
+    private String orderId;
     private String orderNumber;
 
     //多对一，每个order对象都会拥有一个customer对象
     private Customer customer;
 
-    public Order(){}
+    public Customer getCustomer() {
+        return customer;
+    }
 
-    public Order(String orderNumber, Customer customer) {
-        this.orderNumber = orderNumber;
+    public void setCustomer(Customer customer) {
         this.customer = customer;
     }
 
-    public String getId() {
-        return id;
+    public Order() {
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public Order(String orderNumber) {
+        this.orderNumber = orderNumber;
+    }
+
+    public String getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(String orderId) {
+        this.orderId = orderId;
     }
 
     public String getOrderNumber() {
@@ -31,13 +42,5 @@ public class Order implements Serializable {
 
     public void setOrderNumber(String orderNumber) {
         this.orderNumber = orderNumber;
-    }
-
-    public Customer getCustomer() {
-        return customer;
-    }
-
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
     }
 }

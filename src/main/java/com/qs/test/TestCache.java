@@ -26,7 +26,7 @@ public class TestCache {
     public static void main(String[] args) {
 //        test();
 //        test2();
-        test3();
+//        test3();
 //        test4();
     }
 
@@ -49,30 +49,30 @@ public class TestCache {
     }
 
 
-    private static void test2(){
-        Session session = sessionFactory.openSession();
-        Transaction transaction = session.beginTransaction();
-        Order order = new Order();
-        order.setId("4028810e628be81801628be81a690001");
-        order = (Order) session.load(Order.class, order.getId());
-        order.setOrderNumber("ceshi_111");
-        transaction.commit();  //在提交事务时，hibernate会拿保存在session缓存中的order对象和这个order对象比较，如果不一致，则会发出update语句
-    }
-
-    private static void test3(){
-        Session session = sessionFactory.openSession();
-        Transaction transaction = session.beginTransaction();
-
-        Order order = (Order) session.load(Order.class,"4028810e628be81801628be81a690001");
-        order.setId("4028810e628be81801628be81a690001");
-        session.saveOrUpdate(order);
-        Serializable serializable = session.save(order);
-        order.setOrderNumber("123_ceshi");
-        session.saveOrUpdate(order);
-        order.setOrderNumber("aaa");
-        session.update(order);
-        transaction.commit();
-    }
+//    private static void test2(){
+//        Session session = sessionFactory.openSession();
+//        Transaction transaction = session.beginTransaction();
+//        Order order = new Order();
+//        order.setId("4028810e628be81801628be81a690001");
+//        order = (Order) session.load(Order.class, order.getId());
+//        order.setOrderNumber("ceshi_111");
+//        transaction.commit();  //在提交事务时，hibernate会拿保存在session缓存中的order对象和这个order对象比较，如果不一致，则会发出update语句
+//    }
+//
+//    private static void test3(){
+//        Session session = sessionFactory.openSession();
+//        Transaction transaction = session.beginTransaction();
+//
+//        Order order = (Order) session.load(Order.class,"4028810e628be81801628be81a690001");
+//        order.setId("4028810e628be81801628be81a690001");
+//        session.saveOrUpdate(order);
+//        Serializable serializable = session.save(order);
+//        order.setOrderNumber("123_ceshi");
+//        session.saveOrUpdate(order);
+//        order.setOrderNumber("aaa");
+//        session.update(order);
+//        transaction.commit();
+//    }
 
     private static void test4(){
         Session session = sessionFactory.openSession();

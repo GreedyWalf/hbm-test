@@ -9,9 +9,9 @@
             <generator class="uuid"/>
         </id>
 
-        <property name="cardName" type="string" column="CARD_NAME" length="50" not-null="true"/>
+        <property name="cardName" type="string" column="CARD_NAME" length="50"/>
 
         <!-- 使用one-to-one标签设置IdentifyCard和User属性关联关系 -->
-        <one-to-one name="user" class="com.qs.entity.User" lazy="false"/>
+        <one-to-one name="user" class="User"/>
     </class>
 </hibernate-mapping>
