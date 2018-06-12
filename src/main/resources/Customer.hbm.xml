@@ -14,8 +14,9 @@
          <!--
          在一的一方维护多的一方数据；
           inverse：默认值为false，表示由自己（customer）维护关联关系，设置为true，表示由对方（order）维护；
+          batch-size: 批量查询设置，先查询出customer对象，再关联查询order集合，batch-size值可以将多个select查询order数据合并为一个子查询，select...in...
          -->
-        <set name="orderSet" inverse="true">
+        <set name="orderSet" inverse="true" batch-size="3">
             <key column="customer_id"/>
             <one-to-many class="Order"/>
         </set>

@@ -5,7 +5,7 @@
 
 <hibernate-mapping package="com.qs.entity">
     <!-- 上面package属性指定包名，这里name属性值对应类无需写全路径 -->
-    <class name="Order" table="t_order">
+    <class name="Order" table="t_order" batch-size="3">
         <id name="orderId" type="string" column="order_id" length="32">
             <!-- 配置之间生成策略为uuid -->
             <generator class="uuid"/>

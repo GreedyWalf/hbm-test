@@ -15,7 +15,7 @@
         <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
         <!-- 每个数据库都有对应的Dialect以匹配其平台特性 -->
         <property name="dialect">org.hibernate.dialect.MySQLDialect</property>
-        <!-- 指定当前session范围和上下文 -->
+        <!-- 指定当前session范围和上下文，使用session.getCurrentSession()方法时需要配置-->
         <property name="current_session_context_class">thread</property>
         <!-- 指定运行期生成的SQL输出到日志以供调试 -->
         <property name="show_sql">true</property>
