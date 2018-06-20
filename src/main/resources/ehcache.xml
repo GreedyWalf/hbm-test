@@ -1,0 +1,25 @@
+<ehcache>
+    <!--指定二级缓存存放在磁盘上的位置-->
+    <diskStore path="customer.dir"/>　　
+
+    <!--我们可以给每个实体类指定一个对应的缓存，如果没有匹配到该类，则使用这个默认的缓存配置-->
+    <!--
+        maxElementsInMemory: 内存中存放的最大对象数
+        eternal: 是否永久保存
+        timeToLiveSeconds: 以创建时间为基准开始计算的超时时长
+        timeToIdleSeconds: 在创建时间和最近访问时间中取出离现在最近的时间作为基准计算的超时时长
+        备注：如果没设置timeToLiveSeconds，则该对象的超时时间=max(创建时间，最近访问时间)+timeToIdleSeconds，假设为B；如果两者都设置了，则取出A、B最少的值，即min(A,B)，表示只要有一个超时成立即算超时
+    -->
+    <defaultCache maxElementsInMemory="10000" eternal="false" timeToIdleSeconds="120" timeToLiveSeconds="120"
+                  overflowToDisk="true"
+    />
+    　　
+    <!--可以给每个实体类指定一个配置文件，通过name属性指定，要使用类的全名-->
+    <cache name="com.qs.entity.Customer"
+           maxElementsInMemory="10000"
+           eternal="false"
+           timeToIdleSeconds="300"
+           timeToLiveSeconds="600"
+           overflowToDisk="true"
+    />
+</ehcache>

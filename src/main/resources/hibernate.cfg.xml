@@ -20,9 +20,22 @@
         <!-- 指定运行期生成的SQL输出到日志以供调试 -->
         <property name="show_sql">true</property>
         <!-- 是否格式化sql -->
-        <property name="format_sql">true</property>
+        <!--<property name="format_sql">true</property>-->
 
         <property name="hbm2ddl.auto">update</property>
+
+
+        <!-- 开启hibernate二级缓存 -->
+        <property name="hibernate.cache.use_second_level_cache">true</property>
+        <!-- 二级缓存的提供类 在hibernate4.0版本以后我们都是配置这个属性来指定二级缓存的提供类-->
+        <property name="hibernate.cache.region.factory_class">org.hibernate.cache.ehcache.EhCacheRegionFactory</property>
+        <!--这个类在4.0版本以后已经不建议被使用了-->
+        <!--<property name="hibernate.cache.provider_class">net.sf.ehcache.hibernate.EhCacheProvider</property>-->
+        <!-- 二级缓存配置文件的位置 -->
+        <property name="hibernate.cache.provider_configuration_file_resource_path">ehcache.xml</property>
+
+        <!-- 开启查询缓存 （查询缓存也是SessionFactory级别的缓存）-->
+        <property name="hibernate.cache.use_query_cache">true</property>
 
         <!-- 映射文件 -->
         <!-- one-to-many映射 -->

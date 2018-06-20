@@ -29,6 +29,21 @@
             <version>4.3.5.Final</version>
         </dependency>
 
+        <!-- hibernate 二级缓存配置开始 -->
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-ehcache</artifactId>
+            <version>4.3.5.Final</version>
+        </dependency>
+
+        <!-- 二级缓存插件 ehcache -->
+        <dependency>
+            <groupId>net.sf.ehcache</groupId>
+            <artifactId>ehcache</artifactId>
+            <version>2.9.0</version>
+        </dependency>
+        <!-- hibernate 二级缓存配置结束 -->
+
         <!-- oracle驱动 -->
         <dependency>
             <groupId>com.oracle</groupId>

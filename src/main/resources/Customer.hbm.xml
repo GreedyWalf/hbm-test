@@ -5,6 +5,9 @@
 
 <hibernate-mapping package="com.qs.entity">
     <class name="Customer" table="t_customer">
+        <!-- 开启二级缓存，一般设置为只读 -->
+        <cache usage="read-only"/>
+
         <id name="customerId" type="string" column="customer_id" length="32">
             <generator class="uuid"/>
         </id>
